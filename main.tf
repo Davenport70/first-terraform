@@ -63,6 +63,7 @@ resource "aws_instance" "app_instance" {
     tags = {
         Name = var.name
     }
+    key_name = "zack-eng54"
 }
 
 # creating a security group
@@ -81,6 +82,20 @@ resource "aws_security_group" "app_sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description = "allows port 3000"
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["90.252.32.133/32"]
+  }
+  ingress {
+    description = "allows port 22"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["90.252.32.133/32"]
   }
 
   egress {
