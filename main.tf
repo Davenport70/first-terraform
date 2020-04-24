@@ -32,7 +32,7 @@ resource "aws_instance" "app_instance" {
     subnet_id = aws_subnet.app_subnet.id
     vpc_security_group_ids = [aws_security_group.app_sg.id]
     tags = {
-        Name = "eng54-zack-app"
+        Name = "eng54-zack-terraform"
     }
 }
 
