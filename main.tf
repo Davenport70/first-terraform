@@ -52,29 +52,11 @@ data "aws_internet_gateway" "default-gw" {
   }
 }
 
-# Launching an instance
-
-resource "aws_instance" "app_instance" {
-    ami = var.ami_id
-    instance_type = "t2.micro"
-    associate_public_ip_address = true
-    subnet_id = aws_subnet.app_subnet.id
-    vpc_security_group_ids = [aws_security_group.app_sg.id]
-    tags = {
-        Name = var.name
-    }
-    key_name = "zack-eng54"
-}
-
 # creating a security group
 resource "aws_security_group" "app_sg" {
   name        = "zack-app-security-group"
   description = "Allow 80 inbound traffic"
   vpc_id      = var.vpc_id
-
-  tags = {
-    Name = "${var.name}-tags"
-  }
 
   ingress {
     description = "allows port 80"
@@ -103,5 +85,34 @@ resource "aws_security_group" "app_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "${var.name}-tags"
+  }
+}
+
+# Launching an instance
+  resource "aws_instance" "app_instance" {
+    ami = var.ami_id
+    instance_type = "t2.micro"
+    associate_public_ip_address = true
+    subnet_id = aws_subnet.app_subnet.id
+    vpc_security_group_ids = [aws_security_group.app_sg.id]
+    tags = {
+        Name = var.name
+    }
+    key_name = "zack-eng54"
+
+  provisioner "remote-exec" {
+    inline = [
+      "cd /home/ubuntu/app",
+      "npm start"
+    ]
+  }
+  connection {
+    type = "ssh"
+    user = "ubuntu"
+    host = self.public_ip
+    private_key = file("~/.ssh/zack-eng54.pem")
   }
 }
