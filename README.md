@@ -14,6 +14,7 @@ To use this repo you will have to edit the AWS key_name to yours and its file lo
 Terraform
 Git
 AWS CLI 2
+Atom
 
 **To start you will need to clone the Repository**
 git clone: git@github.com:Davenport70/first-terraform.git
@@ -60,3 +61,27 @@ connection {
  }
 }
 ```
+So to run this Github Repository:
+
+**1**
+ensure that you give a good name to your ami, edit the variable:
+```
+variable "name" {
+  default = "INSERT-NAME"
+}
+```
+**2**
+```
+terraform plan
+```
+**3**
+```
+terraform apply
+```
+**4**
+
+To run this open a new browser and run the public ip of your newly created EC2. You can enter something like:
+
+- (http://yourip:3000/fibonacci/10)
+- (http://yourip:3000)
+- (http://yourip:3000/posts)
