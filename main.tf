@@ -52,6 +52,11 @@ data "aws_internet_gateway" "default-gw" {
   }
 }
 
+# creating the template file link
+data "template_file" "app_init" {
+  template = file("./scripts/app/init.sh.tpl")
+}
+
 # creating a security group
 resource "aws_security_group" "app_sg" {
   name        = "zack-app-security-group"
@@ -92,7 +97,7 @@ resource "aws_security_group" "app_sg" {
 }
 
 # Launching an instance
-  resource "aws_instance" "app_instance" {
+resource "aws_instance" "app_instance" {
     ami = var.ami_id
     instance_type = "t2.micro"
     associate_public_ip_address = true
@@ -103,16 +108,18 @@ resource "aws_security_group" "app_sg" {
     }
     key_name = "zack-eng54"
 
-  provisioner "remote-exec" {
-    inline = [
-      "cd /home/ubuntu/app",
-      "npm start"
-    ]
-  }
-  connection {
-    type = "ssh"
-    user = "ubuntu"
-    host = self.public_ip
-    private_key = file("~/.ssh/zack-eng54.pem")
-  }
-}
+    user_data = data.template_file.app_init.rendered
+    }
+
+#   provisioner "remote-exec" {
+#     inline = [
+#       "cd /home/ubuntu/app",
+#       "npm start"
+#     ]
+#   }
+#   connection {
+#     type = "ssh"
+#     user = "ubuntu"
+#     host = self.public_ip
+#     private_key = file("~/.ssh/zack-eng54.pem")
+#   }
