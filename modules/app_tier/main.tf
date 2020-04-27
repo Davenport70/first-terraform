@@ -2,7 +2,7 @@
 
 resource "aws_subnet" "app_subnet" {
     vpc_id = var.vpc_id
-    cidr_block = "10.0.1.0/24"
+    cidr_block = "10.0.70.0/24"
     availability_zone = "eu-west-1a"
     tags = {
       Name = var.name
@@ -10,9 +10,9 @@ resource "aws_subnet" "app_subnet" {
 }
 
 # creating NACL
-resource "aws_network_acl" "public-NACL" {
+resource "aws_network_acl" "public-nacl" {
   vpc_id = var.vpc_id
-  # subnet_ids = aws_subnet.app_subnet.id
+  subnet_ids = [aws_subnet.app_subnet.id]
 
   egress {
     protocol   = "tcp"
@@ -31,29 +31,32 @@ resource "aws_network_acl" "public-NACL" {
     from_port  = 80
     to_port    = 80
   }
+
   ingress {
     protocol   = "tcp"
-    rule_no    = 200
+    rule_no    = 110
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 1024-65535
-    to_port    = 1024-65335
+    from_port  = 433
+    to_port    = 433
   }
+
   ingress {
     protocol   = "tcp"
-    rule_no    = 300
+    rule_no    = 120
     action     = "allow"
     cidr_block = "90.252.32.133/32"
     from_port  = 22
     to_port    = 22
   }
+
   ingress {
     protocol   = "tcp"
-    rule_no    = 400
+    rule_no    = 130
     action     = "allow"
     cidr_block = "0.0.0.0/0"
-    from_port  = 433
-    to_port    = 433
+    from_port  = 1024
+    to_port    = 65535
   }
 
   tags = {
@@ -130,7 +133,7 @@ data "template_file" "app_init" {
 
 # Launching an instance
 resource "aws_instance" "app_instance" {
-    ami = var.ami_id
+    ami = var.ami_id_public
     instance_type = "t2.micro"
     associate_public_ip_address = true
     subnet_id = aws_subnet.app_subnet.id
