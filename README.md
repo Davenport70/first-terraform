@@ -38,6 +38,19 @@ terraform destroy
 ```
 #To run the script
 
+There is a terraform script which runs our app. Inside our main.tf we have two section which enable the template:
+```
+template = file("./scripts/app/init.sh.tpl")
+```
+and
+```
+user_data = data.template_file.app_init.rendered
+```
+
+*See the 'To run this Github Repository:' section at the end*
+
+Alternately another method for running the app:
+
 **Remote-Exec**
 Using the *remote-exec* allows you to execute commands inside of the newly created ec2 so you can run your app.
 
@@ -61,7 +74,7 @@ connection {
  }
 }
 ```
-So to run this Github Repository:
+## To run this Github Repository:
 
 **1**
 ensure that you give a good name to your ami, edit the variable:
