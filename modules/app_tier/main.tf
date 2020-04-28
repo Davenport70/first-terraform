@@ -15,7 +15,7 @@ resource "aws_network_acl" "public-nacl" {
   subnet_ids = [aws_subnet.app_subnet.id]
 
   egress {
-    protocol   = "tcp"
+    protocol   = -1
     rule_no    = 100
     action     = "allow"
     cidr_block = "0.0.0.0/0"
@@ -59,6 +59,24 @@ resource "aws_network_acl" "public-nacl" {
     to_port    = 65535
   }
 
+  ingress {
+  protocol   = "tcp"
+  rule_no    = 140
+  action     = "allow"
+  cidr_block = "0.0.0.0/0"
+  from_port  = 3000
+  to_port    = 3000
+}
+
+ingress {
+    protocol   = "tcp"
+    rule_no    = 150
+    action     = "allow"
+    cidr_block = "10.0.71.0/24"
+    from_port  = 27107
+    to_port    = 27107
+  }
+
   tags = {
     Name = "main"
   }
@@ -83,6 +101,13 @@ resource "aws_security_group" "app_sg" {
     protocol    = "tcp"
     cidr_blocks = ["90.252.32.133/32"]
   }
+  ingress {
+    description = "port 443 from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    }
   ingress {
     description = "allows port 22"
     from_port   = 22
