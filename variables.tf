@@ -11,9 +11,9 @@ variable "name1" {
 }
 
 variable "ami_id_public" {
-  default = "ami-0a2758993ae780044"
+  default = "ami-0bd9af7f4be3cbf63"
 }
 
 variable "ami_id_private" {
-  default = "ami-0e345fa63d5983440"
+  default = "ami-080bd3ca61a6b37b3"
 }
