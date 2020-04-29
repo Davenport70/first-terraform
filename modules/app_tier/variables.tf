@@ -13,3 +13,7 @@ variable "ami_id_public" {
 variable "gateway_id" {
   description = "This is the internet gateway from querying our DB"
 }
+
+variable "db_ip" {
+  description = "The db's ip"
+}

@@ -105,7 +105,15 @@ resource "aws_instance" "mongo_instance" {
         Name = var.name1
     }
     key_name = "zack-eng54"
-
-
-
 }
+
+output "instance_ip_addr" {
+  value = aws_instance.mongo_instance.private_ip
+}
+
+data "template_file" "mongo_init" {
+  template = file("./scripts/db/init.sh.tpl")
+}
+  # set ports
+  # for the mongod db, setting private_ip for posts
+  # AWS gives us new ips
