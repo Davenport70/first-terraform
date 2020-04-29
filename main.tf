@@ -33,6 +33,7 @@ module "app" {
   name = var.name
   ami_id_public = var.ami_id_public
   gateway_id = aws_internet_gateway.igw.id
+  db_ip = module.mongo.instance_ip_addr
   # gateway_id = data.aws_internet_gateway.default-gw.id
 }
 module "mongo" {

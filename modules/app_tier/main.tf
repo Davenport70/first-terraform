@@ -149,7 +149,7 @@ data "template_file" "app_init" {
   template = file("./scripts/app/init.sh.tpl")
 
   vars = {
-    my_name = "${var.name} is the real name zack"
+    db_priv_ip = var.db_ip
   }
   # set ports
   # for the mongod db, setting private_ip for posts
